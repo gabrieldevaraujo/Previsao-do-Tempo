@@ -84,7 +84,7 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#fffbf0')
         document.documentElement.style.setProperty('--hover-color', '#f59e0b')
         document.documentElement.style.setProperty('--focus-color', '#f59e0b')
-        img.src = 'simbolo-de-sol-preto-solido.png'
+        img.src = 'midia/simbolo-de-sol-preto-solido.png'
     }
     else if (hours > 12 && hours < 18) { //Afternoon Theme
         document.documentElement.style.setProperty('--bg-color', '#ff6b35')
@@ -93,7 +93,7 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#ffb347')
         document.documentElement.style.setProperty('--hover-color', '#dc2626')
         document.documentElement.style.setProperty('--focus-color', '#dc2626')
-        img.src = 'nascer-do-sol.png'
+        img.src = 'midia/nascer-do-sol.png'
     }
     else { //Night Theme
         document.documentElement.style.setProperty('--bg-color', '#0a0e27')
@@ -102,10 +102,11 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#0f1729')
         document.documentElement.style.setProperty('--hover-color', '#c084fc')
         document.documentElement.style.setProperty('--focus-color', '#c084fc')
-        img.src = 'noite.png'
+        img.src = 'midia/noite.png'
     }
 }
 
 updateTheme()
+
 
 setInterval(updateTheme, 60000)
