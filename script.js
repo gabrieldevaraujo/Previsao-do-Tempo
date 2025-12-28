@@ -77,7 +77,7 @@ function searchCity(cityChosen) {
     let state = cityChosen.slice(-2)
     let latitude = ''
     let longitude = ''
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&appid=${keyApiWeather}`) //necessary ask to take the latitude and longitude for the search on the Forecasts API
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&appid=${keyApiWeather}`) //necessary ask to take the latitude and longitude for the search on the Forecasts API
         .then(resp => resp.json())
         .then(data => {
             //console.log(data)
