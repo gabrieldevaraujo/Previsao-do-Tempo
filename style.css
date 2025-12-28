@@ -20,8 +20,7 @@ body {
     letter-spacing: 2px;
 }
 
-.time-Icon{
-    padding-top: 0px;
+.time-Icon {
     padding: 10px;
 }
 
@@ -50,7 +49,7 @@ body {
     border-color: var(--focus-color);
 }
 
-.input-city:hover{
+.input-city:hover {
     border-color: var(--hover-color);
     color: var(--hover-color);
     background-color: rgba(88, 166, 255, 0.1);
@@ -93,11 +92,10 @@ button[type="submit"]:active {
     border-radius: 4px;
 }
 
-.summary-List{
+.summary-List {
     text-align: center;
     padding: 5px;
     margin-top: 5px;
-    
 }
 
 #showList {
@@ -108,7 +106,7 @@ button[type="submit"]:active {
     margin-top: 5px;
     list-style: none;
     padding: 10px;
-    max-height:200px;
+    max-height: 200px;
     overflow-y: auto;
     border: 2px solid var(--border-color);
     border-radius: 4px;
@@ -121,10 +119,104 @@ button[type="submit"]:active {
     text-align: center;
 }
 
-.p-summarylist{
+.p-summarylist {
     text-align: center;
     color: var(--text-color);
     font-size: 0.875rem;
+}
+
+#containerCards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    flex-wrap: nowrap;      
+    gap: 20px;
+    padding: 40px 20px;
+    width: 100%;
+    overflow-x: auto;     
+    min-height: 400px;
+}
+
+#containerCards::-webkit-scrollbar {
+    height: 8px;
+}
+
+#containerCards::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.card {
+    flex: 0 0 280px;       
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 25px;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.temp-actual {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.desc {
+    text-transform: capitalize;
+    font-style: italic;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.forecast-card {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.forecast-card span {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.9); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1); 
+    }
 }
 
 footer {
@@ -136,28 +228,4 @@ footer {
     padding: 10px;
     text-align: center;
     font-size: 0.875rem;
-    color: var(--text-color);
-}
-
-@media (max-width: 400px) {
-    body {
-        padding: 0.5rem;
-    }
-
-    footer {
-        padding: 8px;
-        font-size: 0.8rem;
-    }
-}
-
-@media (max-height: 600px) {
-    body {
-        padding: 0.5rem;
-    }
-
-    footer {
-        position: static;
-        margin-top: 10px;
-        background-color: #161b22; 
-    }
 }
