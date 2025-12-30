@@ -11,7 +11,7 @@ body {
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     min-height: 100vh;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
 }
 
 .h1-init {
@@ -29,10 +29,13 @@ body {
     gap: 8px;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    max-width: 450px;
 }
 
 .input-city {
-    width: 400px;
+    flex: 1;
+    width: 100%;
     height: 30px;
     padding: 10px 15px;
     font-size: 1rem;
@@ -42,6 +45,7 @@ body {
     color: var(--text-color);
     border-color: var(--border-color);
     transition: all 0.2s ease;
+    min-width: 0;
 }
 
 .input-city:focus {
@@ -51,8 +55,8 @@ body {
 
 .input-city:hover {
     border-color: var(--hover-color);
-    color: var(--hover-color);
-    background-color: rgba(88, 166, 255, 0.1);
+    color: var(--text-color);
+    background-color: var(--focus-color)
 }
 
 .input-city::placeholder {
@@ -63,6 +67,7 @@ body {
 button[type="submit"] {
     width: 45px;
     height: 45px;
+    flex-shrink: 0;
     padding: 0;
     border: 1px solid;
     border-radius: 6px;
@@ -78,8 +83,8 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     border-color: var(--hover-color);
-    color: var(--hover-color);
-    background-color: rgba(88, 166, 255, 0.1);
+    color: var(--text-color);
+    background-color: var(--focus-color);
 }
 
 button[type="submit"]:active {
@@ -87,9 +92,11 @@ button[type="submit"]:active {
 }
 
 #suggestCity {
-    background-color: #161b22;
-    border: 1px solid #30363d;
+    background-color: var(--border-color);
+    border: 1px solid var(--hover-color);
     border-radius: 4px;
+    width: 100%;
+    max-width: 450px;
 }
 
 .summary-List {
@@ -102,7 +109,6 @@ button[type="submit"]:active {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    max-width: 800px;
     margin-top: 5px;
     list-style: none;
     padding: 10px;
@@ -117,6 +123,19 @@ button[type="submit"]:active {
     background-color: var(--border-color);
     border-radius: 4px;
     text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#showList li:hover {
+    background-color: var(--hover-color); 
+    color: white;
+}
+
+#showList li:active {
+    transform: scale(0.98);
+    background-color: var(--focus-color);
 }
 
 .p-summarylist {
@@ -126,38 +145,25 @@ button[type="submit"]:active {
 }
 
 #containerCards {
-    display: flex;
-    flex-direction: row;
-    justify-content: center; 
-    flex-wrap: nowrap;      
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 40px 20px;
     width: 100%;
-    overflow-x: auto;     
+    max-width: 1200px;
+    margin: 0 auto;
     min-height: 400px;
 }
 
-#containerCards::-webkit-scrollbar {
-    height: 8px;
-}
-
-#containerCards::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-}
-
 .card {
-    flex: 0 0 280px;       
-    background: rgba(255, 255, 255, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--border-color);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--hover-color);
     border-radius: 20px;
     padding: 25px;
-    color: #fff;
+    color: var(--text-color);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -167,13 +173,31 @@ button[type="submit"]:active {
 
 .card:hover {
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--border-color);
 }
 
 .card h2 {
     font-size: 1.5rem;
     margin-bottom: 10px;
     font-weight: 300;
+}
+
+.card img {
+    width: 100px;
+    height: 100px;
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.4));
+    margin: -10px 0;
+}
+
+.card-link {
+    text-decoration: none; 
+    color: inherit; 
+    display: block;      
+}
+
+.card-link:hover .card {
+    transform: translateY(-5px);
+    background: var(--input-bg);
 }
 
 .temp-actual {
@@ -191,7 +215,7 @@ button[type="submit"]:active {
 
 .forecast-card {
     width: 100%;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid var(--hover-color);
     padding-top: 15px;
     display: flex;
     flex-direction: column;
@@ -225,7 +249,29 @@ footer {
     left: 0;
     width: 100%;
     background-color: var(--border-color);
-    padding: 10px;
+    padding: 15px 10px;
     text-align: center;
     font-size: 0.875rem;
+    z-index: 100;
+}
+
+@media (max-width: 900px) {
+    #containerCards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    #showList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    #containerCards {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .temp-actual {
+        font-size: 2.5rem;
+    }
 }

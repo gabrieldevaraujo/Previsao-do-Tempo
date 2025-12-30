@@ -48,15 +48,36 @@ showOptions.forEach(city => {
     showList.appendChild(li) // Suggest the city according to the filter
 })
 
-inputDigit.addEventListener('input', (e) => { //Recieve what user is typing
-    let nameTyped = e.target.value
-    let filter = cityList.filter(c => c.toLowerCase().includes(nameTyped.toLowerCase())) //Filter the name of city comparing to the city list
+showList.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+        const city = e.target.textContent
+        inputDigit.value = city
+    }
+})
 
-    suggestCity.innerHTML = ''
-    filter.forEach(city => {
-        let option = document.createElement('option')
-        option.textContent = city
-        suggestCity.appendChild(option) // Suggest the city according to the filter
+inputDigit.addEventListener('input', (e) => { //Recieve what user is typing
+    let delay
+
+    inputDigit.addEventListener('input', (e) => {
+        clearTimeout(delay) //Clean the delay timer
+
+        delay = setTimeout(() => { //start a new timer for delay
+            let nameTyped = e.target.value
+
+            if (nameTyped === "") {
+                suggestCity.innerHTML = ''
+                return
+            }
+
+            let filter = cityList.filter(c => c.toLowerCase().includes(nameTyped.toLowerCase()))
+
+            suggestCity.innerHTML = ''
+            filter.forEach(city => {
+                let option = document.createElement('option')
+                option.textContent = city
+                suggestCity.appendChild(option)
+            })
+        }, 500)
     })
 })
 
@@ -107,13 +128,14 @@ function callWeatherApi(cityChosen, lat, lon) {
                     date: m.dt_txt.slice(0, -9),
                     tempMax: Math.round(m.main.temp_max),
                     tempMin: Math.round(m.main.temp_min),
-                    probRain: m.pop * 100, //probabilty of raining
+                    probRain: Math.round(m.pop * 100), //probabilty of raining
                 }
             })
 
             let forecastDays = {
                 city: cityChosen,
                 tempActual: Math.round(data.list[0].main.temp),
+                icon: data.list[0].weather[0].icon,
                 weather: data.list[0].weather[0].main,
                 descriptionWeather: data.list[0].weather[0].description,
                 list: forecastListAll //receive the list with the 40 arrays
@@ -188,16 +210,21 @@ function updateFinalList(forecastDays) {
 function createCards(listDataClimate) {
     const container = document.getElementById('containerCards')
     const htmlCards = listDataClimate.map(m => {
+        const iconUrl = `https://openweathermap.org/img/wn/${m.icon}@2x.png`
         return `
-            <div class='card fade-in'>
-                <h2>${m.city}</h2>
-                <div class="temp-actual">${m.tempActual}°C</div>
-                <p class="desc">${m.descriptionWeather}</p>
-                <div class="forecast-card">
-                    <span><strong>Máx:</strong> ${m.list[0].tempMax}°C</span>
-                    <span><strong>Mín:</strong> ${m.list[0].tempMin}°C</span>
+            <a href="weather.html?cidade=${m.city}" class="card-link">
+                <div class='card fade-in'>
+                    <h2>${m.city}</h2>
+                    <div class="temp-actual">${m.tempActual}°C</div>
+                    <img src="${iconUrl}" alt="Ícone do tempo">
+                    <p class="desc">${m.descriptionWeather}</p>
+                    <div class="forecast-card">
+                        <span><strong>Temp Máxima:</strong> ${m.list[0].tempMax}°C</span>
+                        <span><strong>Temp Mínima:</strong> ${m.list[0].tempMin}°C</span>
+                        <span><strong>Chance de Chuva:</strong> ${m.list[0].probRain}%</span>
+                    </div>
                 </div>
-            </div>
+            </a>
         `
     }).join('')
 
