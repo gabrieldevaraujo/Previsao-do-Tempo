@@ -1,0 +1,43 @@
+body {
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+.btn-voltar {
+    text-decoration: none;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: var(--input-bg);
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    background: var(--hover-color);
+    color: white;
+}
+
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--border-color);
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 0.875rem;
+    z-index: 100;
+}

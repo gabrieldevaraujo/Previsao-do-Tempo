@@ -1,5 +1,10 @@
 const keyApiWeather = '52ee7dee89097d90eaa50a080a14f6d8'
-let listDataClimate = []
+export let listDataClimate = JSON.parse(localStorage.getItem('cacheDataList')) || []
+
+window.addEventListener('storage', () => {
+    listDataClimate = JSON.parse(localStorage.getItem('cacheDataList'));
+    console.log('Dados de previsão atualizados.');
+})
 
 const cityList = [
     "Aracaju - SE",
@@ -35,27 +40,34 @@ const cityList = [
     "Vitória - ES"
 ]
 
-const inputDigit = document.querySelector("#typeCity")
-const suggestCity = document.querySelector("#suggestCity")
-const submitCity = document.querySelector("#formCity")
-const showList = document.querySelector('#showList')
+function homePage() {
+    const inputDigit = document.querySelector("#typeCity")
+    const suggestCity = document.querySelector("#suggestCity")
+    const submitCity = document.querySelector("#formCity")
+    const showList = document.querySelector('#showList')
 
-let showOptions = cityList
-
-showOptions.forEach(city => {
-    let li = document.createElement('li')
-    li.textContent = city
-    showList.appendChild(li) // Suggest the city according to the filter
-})
-
-showList.addEventListener('click', (e) => {
-    if (e.target.tagName === 'LI') {
-        const city = e.target.textContent
-        inputDigit.value = city
+    if (!inputDigit || !suggestCity || !submitCity || !showList) return
+    if(listDataClimate && listDataClimate.length > 0){
+        listDataClimate.forEach(e =>{
+            callWeatherApi(e.city,e.lat,e.lon)
+        })
     }
-})
 
-inputDigit.addEventListener('input', (e) => { //Recieve what user is typing
+    let showOptions = cityList
+
+    showOptions.forEach(city => {
+        let li = document.createElement('li')
+        li.textContent = city
+        showList.appendChild(li) // Suggest the city according to the filter
+    })
+
+    showList.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            const city = e.target.textContent
+            inputDigit.value = city
+        }
+    })
+
     let delay
 
     inputDigit.addEventListener('input', (e) => {
@@ -79,18 +91,21 @@ inputDigit.addEventListener('input', (e) => { //Recieve what user is typing
             })
         }, 500)
     })
-})
 
-submitCity.addEventListener('submit', (e) => { //Recieve the city chosen
-    e.preventDefault() //Prevent the page of recharging
-    let cityChosen = inputDigit.value
-    if (cityList.includes(cityChosen)) { //Verify if exist the city on the list
-        searchCity(cityChosen)
-    }
-    else {
-        window.alert(`Selecione uma cidade presente nas sugestões enquanto digita.`)
-    }
-})
+
+    submitCity.addEventListener('submit', (e) => { //Recieve the city chosen
+        e.preventDefault() //Prevent the page of recharging
+        let cityChosen = inputDigit.value
+        if (cityList.includes(cityChosen)) { //Verify if exist the city on the list
+            searchCity(cityChosen)
+        }
+        else {
+            window.alert(`Selecione uma cidade presente nas sugestões enquanto digita.`)
+        }
+    })
+
+}
+
 
 function searchCity(cityChosen) {
     const country = 'BR'
@@ -117,7 +132,7 @@ showSunTimes(sunriseUnix, sunsetUnix, 'America/Sao_Paulo')
 showSunTimes(sunriseUnix, sunsetUnix, 'UTC')*/
 
 
-function callWeatherApi(cityChosen, lat, lon) {
+export function callWeatherApi(cityChosen, lat, lon) {
     fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=pt_br&appid=${keyApiWeather}&units=metric`)
         .then(resp => resp.json())
         .then(data => {
@@ -134,8 +149,9 @@ function callWeatherApi(cityChosen, lat, lon) {
 
             let forecastDays = {
                 city: cityChosen,
+                lat: lat,
+                lon: lon,
                 tempActual: Math.round(data.list[0].main.temp),
-                feels_like: Math.round(data.list[0].main.feels_like),
                 icon: data.list[0].weather[0].icon,
                 weather: data.list[0].weather[0].main,
                 descriptionWeather: data.list[0].weather[0].description,
@@ -148,7 +164,7 @@ function callWeatherApi(cityChosen, lat, lon) {
         })
 }
 
-function filterForecast(forecastDays) {
+export function filterForecast(forecastDays) {
     let newList = []
     let pos = 0
     let previousDate = forecastDays.list[0].date
@@ -179,7 +195,7 @@ function filterForecast(forecastDays) {
     updateFinalList(forecastDays)
 }
 
-function compare(filter) { //compare every atribute to show only one result per day, not 6 differents info for the same day (because of the fact the API update the forecast every 3 hours)
+export function compare(filter) { //compare every atribute to show only one result per day, not 6 differents info for the same day (because of the fact the API update the forecast every 3 hours)
     let tempBigg = filter[0].tempMax
     let tempSmall = filter[0].tempMin
     let probBigg = filter[0].probRain
@@ -196,7 +212,7 @@ function compare(filter) { //compare every atribute to show only one result per 
     }
 }
 
-function updateFinalList(forecastDays) {
+export function updateFinalList(forecastDays) {
     let index = listDataClimate.findIndex(f => f.city === forecastDays.city)
     if (index !== -1) {
         listDataClimate[index] = forecastDays
@@ -206,20 +222,22 @@ function updateFinalList(forecastDays) {
     }
     //console.log(listDataClimate)
     createCards(listDataClimate)
+    localStorage.setItem('cacheDataList', JSON.stringify(listDataClimate))
 }
 
 function createCards(listDataClimate) {
     const container = document.getElementById('containerCards')
-    const htmlCards = listDataClimate.map(m => {
+    if (!container) return
+    const htmlCards = listDataClimate.map((m, index) => {
         const iconUrl = `https://openweathermap.org/img/wn/${m.icon}@2x.png`
         return `
-            <a href="weather.html?cidade=${m.city}" class="card-link">
+            <a href="weather.html?city=${m.city}" class="card-link">
                 <div class='card fade-in'>
+                    <button class="delete-btn" onclick="deleteCard(event, ${index})">×</button>
                     <h2>${m.city}</h2>
                     <div class="temp-actual">${m.tempActual}°C</div>
                     <img src="${iconUrl}" alt="Ícone do tempo">
                     <p class="desc">${m.descriptionWeather}</p>
-                     <p class="desc">Sensação Térmica:${m.feels_like}°C</p>
                     <div class="forecast-card">
                         <span><strong>Temp Máxima:</strong> ${m.list[0].tempMax}°C</span>
                         <span><strong>Temp Mínima:</strong> ${m.list[0].tempMin}°C</span>
@@ -233,7 +251,18 @@ function createCards(listDataClimate) {
     container.innerHTML = htmlCards
 }
 
-function updateTheme() {
+window.deleteCard = function(event, index) {
+    event.preventDefault()
+    event.stopPropagation() //prevent the click moving to the weather.html
+
+    listDataClimate.splice(index, 1) //remove from the list
+
+    localStorage.setItem('cacheDataList', JSON.stringify(listDataClimate))
+
+    createCards(listDataClimate)
+}
+
+export function updateTheme() {
     let timeNow = new Date()
     let hours = timeNow.getHours()
     let img = document.querySelector('img')
@@ -245,7 +274,7 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#fffbf0')
         document.documentElement.style.setProperty('--hover-color', '#f59e0b')
         document.documentElement.style.setProperty('--focus-color', '#f59e0b')
-        img.src = 'midia/simbolo-de-sol-preto-solido.png'
+        if (img) img.src = 'midia/simbolo-de-sol-preto-solido.png'
     }
     else if (hours > 12 && hours < 18) { //Afternoon Theme
         document.documentElement.style.setProperty('--bg-color', '#ff6b35')
@@ -254,7 +283,7 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#ffb347')
         document.documentElement.style.setProperty('--hover-color', '#dc2626')
         document.documentElement.style.setProperty('--focus-color', '#dc2626')
-        img.src = 'midia/nascer-do-sol.png'
+        if (img) img.src = 'midia/nascer-do-sol.png'
     }
     else { //Night Theme
         document.documentElement.style.setProperty('--bg-color', '#0a0e27')
@@ -263,14 +292,12 @@ function updateTheme() {
         document.documentElement.style.setProperty('--input-bg', '#0f1729')
         document.documentElement.style.setProperty('--hover-color', '#c084fc')
         document.documentElement.style.setProperty('--focus-color', '#c084fc')
-        img.src = 'midia/noite.png'
+        if (img) img.src = 'midia/noite.png'
     }
 }
+
+homePage()
 
 updateTheme()
 
 setInterval(updateTheme, 60000)
-
-//construir tema para chuva, sol ou neve
-//construir html para cards
-//construir uma nova page html para evixibir mais infos do dia na tela?
