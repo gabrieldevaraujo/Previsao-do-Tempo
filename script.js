@@ -152,6 +152,7 @@ export function callWeatherApi(cityChosen, lat, lon) {
                 lat: lat,
                 lon: lon,
                 tempActual: Math.round(data.list[0].main.temp),
+                feels_like: Math.round(data.list[0].main.feels_like),
                 icon: data.list[0].weather[0].icon,
                 weather: data.list[0].weather[0].main,
                 descriptionWeather: data.list[0].weather[0].description,
@@ -238,6 +239,7 @@ function createCards(listDataClimate) {
                     <div class="temp-actual">${m.tempActual}°C</div>
                     <img src="${iconUrl}" alt="Ícone do tempo">
                     <p class="desc">${m.descriptionWeather}</p>
+                    <p class="desc">Sensação Térmica:${m.feels_like}°C</p>
                     <div class="forecast-card">
                         <span><strong>Temp Máxima:</strong> ${m.list[0].tempMax}°C</span>
                         <span><strong>Temp Mínima:</strong> ${m.list[0].tempMin}°C</span>
@@ -299,5 +301,6 @@ export function updateTheme() {
 homePage()
 
 updateTheme()
+
 
 setInterval(updateTheme, 60000)
