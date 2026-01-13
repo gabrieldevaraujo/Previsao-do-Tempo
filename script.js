@@ -119,7 +119,7 @@ function searchCity(cityChosen) {
             //console.log(data)
             latitude = data[0].lat
             longitude = data[0].lon
-            callWeatherApi(cityChosen, latitude, longitude)
+            callWeatherApi(cityChosen,latitude,longitude)
         })
 }
 
@@ -152,14 +152,13 @@ export function callWeatherApi(cityChosen, lat, lon) {
                 lat: lat,
                 lon: lon,
                 tempActual: Math.round(data.list[0].main.temp),
-                feels_like: Math.round(data.list[0].main.feels_like),
                 icon: data.list[0].weather[0].icon,
                 weather: data.list[0].weather[0].main,
                 descriptionWeather: data.list[0].weather[0].description,
                 list: forecastListAll //receive the list with the 40 arrays
             }
             //console.log(forecastDays)
-
+            console.log('Consulta API com sucesso.')
             filterForecast(forecastDays)
             forecastDays = ''
         })
@@ -224,6 +223,7 @@ export function updateFinalList(forecastDays) {
     //console.log(listDataClimate)
     createCards(listDataClimate)
     localStorage.setItem('cacheDataList', JSON.stringify(listDataClimate))
+    console.log('Atualização lista final concluida com sucesso.')
 }
 
 function createCards(listDataClimate) {
@@ -232,14 +232,13 @@ function createCards(listDataClimate) {
     const htmlCards = listDataClimate.map((m, index) => {
         const iconUrl = `https://openweathermap.org/img/wn/${m.icon}@2x.png`
         return `
-            <a href="weather.html?city=${m.city}" class="card-link">
+            <a href="weather.html?city=${encodeURIComponent(m.city)}&icon=${encodeURIComponent(iconUrl)}" class="card-link">
                 <div class='card fade-in'>
                     <button class="delete-btn" onclick="deleteCard(event, ${index})">×</button>
                     <h2>${m.city}</h2>
                     <div class="temp-actual">${m.tempActual}°C</div>
                     <img src="${iconUrl}" alt="Ícone do tempo">
                     <p class="desc">${m.descriptionWeather}</p>
-                    <p class="desc">Sensação Térmica:${m.feels_like}°C</p>
                     <div class="forecast-card">
                         <span><strong>Temp Máxima:</strong> ${m.list[0].tempMax}°C</span>
                         <span><strong>Temp Mínima:</strong> ${m.list[0].tempMin}°C</span>
@@ -264,10 +263,10 @@ window.deleteCard = function(event, index) {
     createCards(listDataClimate)
 }
 
-export function updateTheme() {
+function updateTheme() {
     let timeNow = new Date()
     let hours = timeNow.getHours()
-    let img = document.querySelector('img')
+    let img = document.getElementById('timeIcon')
 
     if (hours > 6 && hours < 13) { //Morning Theme
         document.documentElement.style.setProperty('--bg-color', '#fef9e7')
@@ -301,6 +300,5 @@ export function updateTheme() {
 homePage()
 
 updateTheme()
-
 
 setInterval(updateTheme, 60000)

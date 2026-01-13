@@ -11,7 +11,7 @@
 <body>
 
     <h1 class="h1-init">Previsão do Tempo </h1> 
-    <img src='' alt="sun/sunset/moon" width="50" height="50" class="time-Icon">
+    <img src='' alt="sun/sunset/moon" width="50" height="50" class="time-Icon" id="timeIcon">
     <form class="top-Screen" id="formCity">
         <input type="text" id="typeCity" list="suggestCity" class="input-city" placeholder="Digite uma Cidade">
         <button type="submit" id="submitCity">
@@ -29,7 +29,7 @@
         <p class="p-summarylist">Caso não possua sua cidade nesta lista, então não possuímos dados desta cidade.</p>
     </details>
 
-    <div id="containerCards" class="container-cards"></div>
+    <div id="containerCards"></div>
 
     <footer>
         <p>

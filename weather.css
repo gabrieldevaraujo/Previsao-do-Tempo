@@ -1,5 +1,5 @@
 body {
-    background-color: var(--bg-color); 
+    background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
     display: flex;
@@ -14,21 +14,237 @@ body {
     padding-bottom: 80px;
 }
 
-.btn-voltar {
+.header-weather {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    align-items: center;
+}
+
+.btn-weather {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
     background: var(--input-bg);
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.btn-voltar:hover {
+.btn-weather svg {
+    display: block;
+}
+
+.btn-weather:hover {
     background: var(--hover-color);
-    color: white;
+    color: var(--text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+button.btn-weather {
+    outline: none;
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#cityChosen {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 20px 0;
+}
+
+#containerMain {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 25px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#containerActualDay {
+    background: var(--border-color);
+    border: 1px solid var(--hover-color);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 40px;
+    color: var(--text-color);
+    flex: 0 0 70%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.date-actual {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+}
+
+.temp-actual {
+    font-size: 7.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 10px 0;
+    letter-spacing: -2px;
+}
+
+.weather-icon-main {
+    width: 80px;
+    height: auto;
+    margin: 10px 0;
+}
+
+.desc {
+    font-size: 1.6rem;
+    text-transform: capitalize;
+    margin: 0 0 40px 0;
+    opacity: 0.9;
+}
+
+.info-grid-actual {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    justify-content: space-around;
+    border-top: 1px solid var(--hover-color);
+    padding-top: 30px;
+}
+
+.info-item-actual {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-item-actual .label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.info-item-actual .value {
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+@media (max-width: 850px) {
+    .temp-actual {
+        font-size: 5rem;
+    }
+    .info-item-actual .value {
+        font-size: 1.4rem;
+    }
+}
+
+#containerFutureDays {
+    position: relative;
+    background: var(--border-color);
+    border: 1px solid var(--hover-color);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 45px 20px 20px 20px;
+    color: var(--text-color);
+    flex: 0 0 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-forecast {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: var(--text-color);
+    color: var(--border-color);
+    padding: 5px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+#containerFutureDays .forecast-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--hover-color);
+}
+
+#containerFutureDays .forecast-card:last-child {
+    border-bottom: none;
+}
+
+.date {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#containerFutureDays .info-grid {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#containerFutureDays .info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+#containerFutureDays .label {
+    font-weight: 400;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+#containerFutureDays .value {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+@media (max-width: 850px) {
+    #containerMain {
+        flex-direction: column;
+    }
+    #containerActualDay, 
+    #containerFutureDays {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+}
 
 footer {
     position: fixed;
